@@ -1,0 +1,2005 @@
+{
+    "name": "Email Automation Phase 2",
+    "flow": [
+        {
+            "id": 3,
+            "module": "telegram:WatchUpdates",
+            "version": 1,
+            "parameters": {
+                "__IMTHOOK__": 2431416
+            },
+            "filter": null,
+            "mapper": {},
+            "metadata": {
+                "designer": {
+                    "x": 0,
+                    "y": 600
+                },
+                "restore": {
+                    "parameters": {
+                        "__IMTHOOK__": {
+                            "data": {
+                                "editable": "false"
+                            },
+                            "label": "Email Categorizer Webhook"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTHOOK__",
+                        "type": "hook:telegramapi",
+                        "label": "Webhook",
+                        "required": true
+                    }
+                ]
+            }
+        },
+        {
+            "id": 4,
+            "module": "builtin:BasicRouter",
+            "version": 1,
+            "mapper": null,
+            "metadata": {
+                "designer": {
+                    "x": 300,
+                    "y": 600
+                }
+            },
+            "routes": [
+                {
+                    "flow": [
+                        {
+                            "id": 5,
+                            "module": "google-email:sendAnEmail",
+                            "version": 4,
+                            "parameters": {
+                                "__IMTCONN__": 3636425
+                            },
+                            "filter": {
+                                "name": "Important Emails",
+                                "conditions": [
+                                    [
+                                        {
+                                            "a": "{{3.message.text}}",
+                                            "b": "Important",
+                                            "o": "text:equal:ci"
+                                        }
+                                    ]
+                                ]
+                            },
+                            "mapper": {
+                                "to": [
+                                    "divineikubor04@gmail.com"
+                                ],
+                                "subject": "Important Emails for Inbox",
+                                "bodyType": "collection",
+                                "contents": [
+                                    {
+                                        "text": "These are the Important  Emails",
+                                        "image": {}
+                                    }
+                                ]
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 600,
+                                    "y": 0
+                                },
+                                "restore": {
+                                    "expect": {
+                                        "cc": {
+                                            "mode": "chose"
+                                        },
+                                        "to": {
+                                            "mode": "chose",
+                                            "items": [
+                                                null
+                                            ]
+                                        },
+                                        "bcc": {
+                                            "mode": "chose"
+                                        },
+                                        "from": {
+                                            "mode": "chose",
+                                            "label": "Empty"
+                                        },
+                                        "bodyType": {
+                                            "label": "Collection of contents (text, images, etc.)"
+                                        },
+                                        "contents": {
+                                            "mode": "chose",
+                                            "items": [
+                                                null
+                                            ]
+                                        },
+                                        "signature": {
+                                            "mode": "chose",
+                                            "label": "Empty"
+                                        },
+                                        "attachments": {
+                                            "mode": "chose"
+                                        },
+                                        "emailHeaders": {
+                                            "mode": "chose"
+                                        }
+                                    },
+                                    "parameters": {
+                                        "__IMTCONN__": {
+                                            "data": {
+                                                "scoped": "true",
+                                                "connection": "google-email"
+                                            },
+                                            "label": "Licht Regen Gmail Connection 20/11/2025 (divineikubor04@gmail.com)"
+                                        }
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "__IMTCONN__",
+                                        "type": "account:google-email",
+                                        "label": "Connection",
+                                        "required": true
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "to",
+                                        "spec": {
+                                            "name": "value",
+                                            "type": "email",
+                                            "label": "Recipient email address",
+                                            "required": true,
+                                            "validate": true
+                                        },
+                                        "type": "array",
+                                        "label": "To",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "subject",
+                                        "type": "text",
+                                        "label": "Subject"
+                                    },
+                                    {
+                                        "name": "bodyType",
+                                        "type": "select",
+                                        "label": "Body type",
+                                        "required": true,
+                                        "validate": {
+                                            "enum": [
+                                                "rawHtml",
+                                                "collection"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": "attachments",
+                                        "spec": {
+                                            "name": "value",
+                                            "spec": [
+                                                {
+                                                    "name": "filename",
+                                                    "type": "filename",
+                                                    "label": "File name",
+                                                    "required": true,
+                                                    "semantic": "file:name"
+                                                },
+                                                {
+                                                    "name": "data",
+                                                    "type": "buffer",
+                                                    "label": "Data",
+                                                    "required": true,
+                                                    "semantic": "file:data"
+                                                }
+                                            ],
+                                            "type": "collection",
+                                            "label": "Attachment"
+                                        },
+                                        "type": "array",
+                                        "label": "Attachments"
+                                    },
+                                    {
+                                        "name": "from",
+                                        "type": "select",
+                                        "label": "From"
+                                    },
+                                    {
+                                        "name": "cc",
+                                        "spec": {
+                                            "name": "value",
+                                            "type": "email",
+                                            "label": "Recipient email address",
+                                            "required": true
+                                        },
+                                        "type": "array",
+                                        "label": "CC recipients"
+                                    },
+                                    {
+                                        "name": "bcc",
+                                        "spec": {
+                                            "name": "value",
+                                            "type": "email",
+                                            "label": "Recipient email address",
+                                            "required": true
+                                        },
+                                        "type": "array",
+                                        "label": "BCC recipients"
+                                    },
+                                    {
+                                        "name": "emailHeaders",
+                                        "spec": {
+                                            "name": "value",
+                                            "spec": [
+                                                {
+                                                    "name": "key",
+                                                    "type": "text",
+                                                    "label": "Key",
+                                                    "required": true
+                                                },
+                                                {
+                                                    "name": "value",
+                                                    "type": "text",
+                                                    "label": "Value"
+                                                }
+                                            ],
+                                            "type": "collection",
+                                            "label": "Email header"
+                                        },
+                                        "type": "array",
+                                        "label": "Additional email headers"
+                                    },
+                                    {
+                                        "name": "contents",
+                                        "spec": {
+                                            "name": "value",
+                                            "spec": [
+                                                {
+                                                    "name": "text",
+                                                    "type": "text",
+                                                    "label": "Text"
+                                                },
+                                                {
+                                                    "name": "image",
+                                                    "spec": [
+                                                        {
+                                                            "name": "filename",
+                                                            "type": "filename",
+                                                            "label": "File name",
+                                                            "semantic": "file:name"
+                                                        },
+                                                        {
+                                                            "name": "data",
+                                                            "type": "buffer",
+                                                            "label": "Data",
+                                                            "semantic": "file:data"
+                                                        },
+                                                        {
+                                                            "name": "width",
+                                                            "type": "uinteger",
+                                                            "label": "Width"
+                                                        },
+                                                        {
+                                                            "name": "height",
+                                                            "type": "uinteger",
+                                                            "label": "Height"
+                                                        }
+                                                    ],
+                                                    "type": "collection",
+                                                    "label": "Image"
+                                                }
+                                            ],
+                                            "type": "collection",
+                                            "label": "Content"
+                                        },
+                                        "type": "array",
+                                        "label": "Body contents"
+                                    },
+                                    {
+                                        "name": "signature",
+                                        "type": "select",
+                                        "label": "Signature content"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 15,
+                            "module": "datastore:SearchRecord",
+                            "version": 1,
+                            "parameters": {
+                                "limit": null,
+                                "datastore": 77680,
+                                "continueWhenNoRes": false
+                            },
+                            "mapper": {
+                                "sort": [],
+                                "filter": [],
+                                "mappAbleLimit": ""
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 900,
+                                    "y": 0
+                                },
+                                "restore": {
+                                    "parameters": {
+                                        "datastore": {
+                                            "label": "Licht Regen Data Store"
+                                        }
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "datastore",
+                                        "type": "datastore",
+                                        "label": "Data store",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "continueWhenNoRes",
+                                        "type": "boolean",
+                                        "label": "Continue the execution of the route even if the module returns no results"
+                                    },
+                                    {
+                                        "name": "limit",
+                                        "type": "uinteger",
+                                        "label": "Limit"
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "filter",
+                                        "type": "filter",
+                                        "label": "Filter",
+                                        "options": "rpc://datastore/1.15.1/RpcGetUDTKeys",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "sort",
+                                        "spec": [
+                                            {
+                                                "name": "key",
+                                                "type": "select",
+                                                "label": "Key",
+                                                "dynamic": true,
+                                                "options": [],
+                                                "required": true
+                                            },
+                                            {
+                                                "name": "order",
+                                                "type": "select",
+                                                "label": "Order",
+                                                "options": [
+                                                    {
+                                                        "label": "Ascending",
+                                                        "value": 1
+                                                    },
+                                                    {
+                                                        "label": "Descending",
+                                                        "value": -1
+                                                    }
+                                                ],
+                                                "required": true
+                                            }
+                                        ],
+                                        "type": "array",
+                                        "label": "Sort"
+                                    },
+                                    {
+                                        "name": "mappAbleLimit",
+                                        "type": "uinteger",
+                                        "label": "Mappable Limit"
+                                    }
+                                ],
+                                "interface": [
+                                    {
+                                        "name": "__IMTLENGTH__",
+                                        "type": "uinteger",
+                                        "label": "Total number of bundles"
+                                    },
+                                    {
+                                        "name": "__IMTINDEX__",
+                                        "type": "uinteger",
+                                        "label": "Bundle order position"
+                                    },
+                                    {
+                                        "name": "key",
+                                        "type": "text",
+                                        "label": "Key"
+                                    },
+                                    {
+                                        "name": "data",
+                                        "spec": [
+                                            {
+                                                "help": "",
+                                                "name": "Content",
+                                                "type": "text",
+                                                "label": null,
+                                                "default": null,
+                                                "required": false,
+                                                "multiline": false
+                                            }
+                                        ],
+                                        "type": "collection",
+                                        "label": "Record"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 16,
+                            "module": "datastore:DeleteRecord",
+                            "version": 1,
+                            "parameters": {
+                                "datastore": 77680
+                            },
+                            "mapper": {
+                                "key": "{{15.key}}"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 1200,
+                                    "y": 0
+                                },
+                                "restore": {
+                                    "parameters": {
+                                        "datastore": {
+                                            "label": "Licht Regen Data Store"
+                                        }
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "datastore",
+                                        "type": "datastore",
+                                        "label": "Data store",
+                                        "required": true
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "key",
+                                        "type": "text",
+                                        "label": "Key",
+                                        "required": true
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "flow": [
+                        {
+                            "id": 11,
+                            "module": "datastore:SearchRecord",
+                            "version": 1,
+                            "parameters": {
+                                "limit": 1,
+                                "datastore": 77680,
+                                "continueWhenNoRes": false
+                            },
+                            "filter": {
+                                "name": "Unimportant Emails",
+                                "conditions": [
+                                    [
+                                        {
+                                            "a": "{{3.message.text}}",
+                                            "b": "Unimportant",
+                                            "o": "text:equal:ci"
+                                        }
+                                    ]
+                                ]
+                            },
+                            "mapper": {
+                                "sort": [],
+                                "filter": [],
+                                "mappAbleLimit": ""
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 600,
+                                    "y": 600
+                                },
+                                "restore": {
+                                    "parameters": {
+                                        "datastore": {
+                                            "label": "Licht Regen Data Store"
+                                        }
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "datastore",
+                                        "type": "datastore",
+                                        "label": "Data store",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "continueWhenNoRes",
+                                        "type": "boolean",
+                                        "label": "Continue the execution of the route even if the module returns no results"
+                                    },
+                                    {
+                                        "name": "limit",
+                                        "type": "uinteger",
+                                        "label": "Limit"
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "filter",
+                                        "type": "filter",
+                                        "label": "Filter",
+                                        "options": "rpc://datastore/1.15.1/RpcGetUDTKeys",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "sort",
+                                        "spec": [
+                                            {
+                                                "name": "key",
+                                                "type": "select",
+                                                "label": "Key",
+                                                "dynamic": true,
+                                                "options": [],
+                                                "required": true
+                                            },
+                                            {
+                                                "name": "order",
+                                                "type": "select",
+                                                "label": "Order",
+                                                "options": [
+                                                    {
+                                                        "label": "Ascending",
+                                                        "value": 1
+                                                    },
+                                                    {
+                                                        "label": "Descending",
+                                                        "value": -1
+                                                    }
+                                                ],
+                                                "required": true
+                                            }
+                                        ],
+                                        "type": "array",
+                                        "label": "Sort"
+                                    },
+                                    {
+                                        "name": "mappAbleLimit",
+                                        "type": "uinteger",
+                                        "label": "Mappable Limit"
+                                    }
+                                ],
+                                "interface": [
+                                    {
+                                        "name": "__IMTLENGTH__",
+                                        "type": "uinteger",
+                                        "label": "Total number of bundles"
+                                    },
+                                    {
+                                        "name": "__IMTINDEX__",
+                                        "type": "uinteger",
+                                        "label": "Bundle order position"
+                                    },
+                                    {
+                                        "name": "key",
+                                        "type": "text",
+                                        "label": "Key"
+                                    },
+                                    {
+                                        "name": "data",
+                                        "spec": [
+                                            {
+                                                "help": "",
+                                                "name": "Content",
+                                                "type": "text",
+                                                "label": null,
+                                                "default": null,
+                                                "required": false,
+                                                "multiline": false
+                                            }
+                                        ],
+                                        "type": "collection",
+                                        "label": "Record"
+                                    }
+                                ],
+                                "advanced": true
+                            }
+                        },
+                        {
+                            "id": 6,
+                            "module": "builtin:BasicRouter",
+                            "version": 1,
+                            "mapper": null,
+                            "metadata": {
+                                "designer": {
+                                    "x": 900,
+                                    "y": 600
+                                }
+                            },
+                            "routes": [
+                                {
+                                    "flow": [
+                                        {
+                                            "id": 9,
+                                            "module": "google-email:moveAnEmail",
+                                            "version": 4,
+                                            "parameters": {
+                                                "__IMTCONN__": 3636425
+                                            },
+                                            "filter": {
+                                                "name": "Educational PATH",
+                                                "conditions": [
+                                                    [
+                                                        {
+                                                            "a": "{{11.data.Content}}",
+                                                            "b": "Educational",
+                                                            "o": "text:contain:ci"
+                                                        }
+                                                    ]
+                                                ]
+                                            },
+                                            "mapper": {
+                                                "to": "Label_3220829207423554754",
+                                                "from": "INBOX",
+                                                "messageId": "{{11.data.`Message ID`}}"
+                                            },
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 1200,
+                                                    "y": 300
+                                                },
+                                                "restore": {
+                                                    "expect": {
+                                                        "to": {
+                                                            "mode": "chose",
+                                                            "label": "Educational"
+                                                        },
+                                                        "from": {
+                                                            "mode": "chose",
+                                                            "label": "Inbox"
+                                                        },
+                                                        "messageId": {
+                                                            "nested": [
+                                                                {
+                                                                    "help": "To ensure you see the most up-to-date labels, refresh **↻** the Message ID above.",
+                                                                    "name": "from",
+                                                                    "type": "select",
+                                                                    "label": "Source folder",
+                                                                    "default": "INBOX",
+                                                                    "dynamic": true,
+                                                                    "grouped": true,
+                                                                    "options": [
+                                                                        {
+                                                                            "type": "system",
+                                                                            "label": "System folders",
+                                                                            "options": [
+                                                                                {
+                                                                                    "label": "Important",
+                                                                                    "value": "IMPORTANT"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Inbox",
+                                                                                    "value": "INBOX"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Spam",
+                                                                                    "value": "SPAM"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Starred",
+                                                                                    "value": "STARRED"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Trash",
+                                                                                    "value": "TRASH"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Unread",
+                                                                                    "value": "UNREAD"
+                                                                                }
+                                                                            ]
+                                                                        },
+                                                                        {
+                                                                            "type": "category",
+                                                                            "label": "Categories",
+                                                                            "options": [
+                                                                                {
+                                                                                    "label": "Forums",
+                                                                                    "value": "CATEGORY_FORUMS"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Personal",
+                                                                                    "value": "CATEGORY_PERSONAL"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Promotions",
+                                                                                    "value": "CATEGORY_PROMOTIONS"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Social",
+                                                                                    "value": "CATEGORY_SOCIAL"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Updates",
+                                                                                    "value": "CATEGORY_UPDATES"
+                                                                                }
+                                                                            ]
+                                                                        },
+                                                                        {
+                                                                            "type": "user",
+                                                                            "label": "User labels",
+                                                                            "options": [
+                                                                                {
+                                                                                    "label": "Educational",
+                                                                                    "value": "Label_3220829207423554754"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Invoices",
+                                                                                    "value": "Label_3150061830620407632"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Others",
+                                                                                    "value": "Label_2290799524794094429"
+                                                                                }
+                                                                            ]
+                                                                        }
+                                                                    ],
+                                                                    "mappable": {
+                                                                        "help": "Enter a folder/label ID."
+                                                                    },
+                                                                    "required": true
+                                                                },
+                                                                {
+                                                                    "help": "To ensure you see the most up-to-date labels, refresh **↻** the Message ID above.",
+                                                                    "name": "to",
+                                                                    "type": "select",
+                                                                    "label": "Destination folder",
+                                                                    "dynamic": true,
+                                                                    "grouped": true,
+                                                                    "options": [
+                                                                        {
+                                                                            "type": "system",
+                                                                            "label": "System folders",
+                                                                            "options": [
+                                                                                {
+                                                                                    "label": "Important",
+                                                                                    "value": "IMPORTANT"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Inbox",
+                                                                                    "value": "INBOX"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Spam",
+                                                                                    "value": "SPAM"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Starred",
+                                                                                    "value": "STARRED"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Trash",
+                                                                                    "value": "TRASH"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Unread",
+                                                                                    "value": "UNREAD"
+                                                                                }
+                                                                            ]
+                                                                        },
+                                                                        {
+                                                                            "type": "category",
+                                                                            "label": "Categories",
+                                                                            "options": [
+                                                                                {
+                                                                                    "label": "Forums",
+                                                                                    "value": "CATEGORY_FORUMS"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Personal",
+                                                                                    "value": "CATEGORY_PERSONAL"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Promotions",
+                                                                                    "value": "CATEGORY_PROMOTIONS"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Social",
+                                                                                    "value": "CATEGORY_SOCIAL"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Updates",
+                                                                                    "value": "CATEGORY_UPDATES"
+                                                                                }
+                                                                            ]
+                                                                        },
+                                                                        {
+                                                                            "type": "user",
+                                                                            "label": "User labels",
+                                                                            "options": [
+                                                                                {
+                                                                                    "label": "Educational",
+                                                                                    "value": "Label_3220829207423554754"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Invoices",
+                                                                                    "value": "Label_3150061830620407632"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Others",
+                                                                                    "value": "Label_2290799524794094429"
+                                                                                }
+                                                                            ]
+                                                                        }
+                                                                    ],
+                                                                    "mappable": {
+                                                                        "help": "Enter a folder/label ID."
+                                                                    },
+                                                                    "required": true
+                                                                }
+                                                            ]
+                                                        }
+                                                    },
+                                                    "parameters": {
+                                                        "__IMTCONN__": {
+                                                            "data": {
+                                                                "scoped": "true",
+                                                                "connection": "google-email"
+                                                            },
+                                                            "label": "Licht Regen Gmail Connection 20/11/2025 (divineikubor04@gmail.com)"
+                                                        }
+                                                    }
+                                                },
+                                                "parameters": [
+                                                    {
+                                                        "name": "__IMTCONN__",
+                                                        "type": "account:google-email",
+                                                        "label": "Connection",
+                                                        "required": true
+                                                    }
+                                                ],
+                                                "expect": [
+                                                    {
+                                                        "name": "messageId",
+                                                        "type": "text",
+                                                        "label": "Message ID",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "from",
+                                                        "type": "select",
+                                                        "label": "Source folder",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "to",
+                                                        "type": "select",
+                                                        "label": "Destination folder",
+                                                        "required": true
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        {
+                                            "id": 12,
+                                            "module": "datastore:DeleteRecord",
+                                            "version": 1,
+                                            "parameters": {
+                                                "datastore": 77680
+                                            },
+                                            "mapper": {
+                                                "key": "{{11.key}}"
+                                            },
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 1500,
+                                                    "y": 300
+                                                },
+                                                "restore": {
+                                                    "parameters": {
+                                                        "datastore": {
+                                                            "label": "Licht Regen Data Store"
+                                                        }
+                                                    }
+                                                },
+                                                "parameters": [
+                                                    {
+                                                        "name": "datastore",
+                                                        "type": "datastore",
+                                                        "label": "Data store",
+                                                        "required": true
+                                                    }
+                                                ],
+                                                "expect": [
+                                                    {
+                                                        "name": "key",
+                                                        "type": "text",
+                                                        "label": "Key",
+                                                        "required": true
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "flow": [
+                                        {
+                                            "id": 8,
+                                            "module": "google-email:moveAnEmail",
+                                            "version": 4,
+                                            "parameters": {
+                                                "__IMTCONN__": 3636425
+                                            },
+                                            "filter": {
+                                                "name": "Invoices PATH",
+                                                "conditions": [
+                                                    [
+                                                        {
+                                                            "a": "{{11.data.Content}}",
+                                                            "b": "Invoices",
+                                                            "o": "text:contain:ci"
+                                                        }
+                                                    ]
+                                                ]
+                                            },
+                                            "mapper": {
+                                                "to": "Label_3150061830620407632",
+                                                "from": "INBOX",
+                                                "messageId": "{{11.data.`Message ID`}}"
+                                            },
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 1200,
+                                                    "y": 600
+                                                },
+                                                "restore": {
+                                                    "expect": {
+                                                        "to": {
+                                                            "mode": "chose",
+                                                            "label": "Invoices"
+                                                        },
+                                                        "from": {
+                                                            "mode": "chose",
+                                                            "label": "Inbox"
+                                                        },
+                                                        "messageId": {
+                                                            "nested": [
+                                                                {
+                                                                    "help": "To ensure you see the most up-to-date labels, refresh **↻** the Message ID above.",
+                                                                    "name": "from",
+                                                                    "type": "select",
+                                                                    "label": "Source folder",
+                                                                    "default": "INBOX",
+                                                                    "dynamic": true,
+                                                                    "grouped": true,
+                                                                    "options": [
+                                                                        {
+                                                                            "type": "system",
+                                                                            "label": "System folders",
+                                                                            "options": [
+                                                                                {
+                                                                                    "label": "Important",
+                                                                                    "value": "IMPORTANT"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Inbox",
+                                                                                    "value": "INBOX"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Spam",
+                                                                                    "value": "SPAM"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Starred",
+                                                                                    "value": "STARRED"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Trash",
+                                                                                    "value": "TRASH"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Unread",
+                                                                                    "value": "UNREAD"
+                                                                                }
+                                                                            ]
+                                                                        },
+                                                                        {
+                                                                            "type": "category",
+                                                                            "label": "Categories",
+                                                                            "options": [
+                                                                                {
+                                                                                    "label": "Forums",
+                                                                                    "value": "CATEGORY_FORUMS"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Personal",
+                                                                                    "value": "CATEGORY_PERSONAL"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Promotions",
+                                                                                    "value": "CATEGORY_PROMOTIONS"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Social",
+                                                                                    "value": "CATEGORY_SOCIAL"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Updates",
+                                                                                    "value": "CATEGORY_UPDATES"
+                                                                                }
+                                                                            ]
+                                                                        },
+                                                                        {
+                                                                            "type": "user",
+                                                                            "label": "User labels",
+                                                                            "options": [
+                                                                                {
+                                                                                    "label": "Educational",
+                                                                                    "value": "Label_3220829207423554754"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Invoices",
+                                                                                    "value": "Label_3150061830620407632"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Others",
+                                                                                    "value": "Label_2290799524794094429"
+                                                                                }
+                                                                            ]
+                                                                        }
+                                                                    ],
+                                                                    "mappable": {
+                                                                        "help": "Enter a folder/label ID."
+                                                                    },
+                                                                    "required": true
+                                                                },
+                                                                {
+                                                                    "help": "To ensure you see the most up-to-date labels, refresh **↻** the Message ID above.",
+                                                                    "name": "to",
+                                                                    "type": "select",
+                                                                    "label": "Destination folder",
+                                                                    "dynamic": true,
+                                                                    "grouped": true,
+                                                                    "options": [
+                                                                        {
+                                                                            "type": "system",
+                                                                            "label": "System folders",
+                                                                            "options": [
+                                                                                {
+                                                                                    "label": "Important",
+                                                                                    "value": "IMPORTANT"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Inbox",
+                                                                                    "value": "INBOX"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Spam",
+                                                                                    "value": "SPAM"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Starred",
+                                                                                    "value": "STARRED"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Trash",
+                                                                                    "value": "TRASH"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Unread",
+                                                                                    "value": "UNREAD"
+                                                                                }
+                                                                            ]
+                                                                        },
+                                                                        {
+                                                                            "type": "category",
+                                                                            "label": "Categories",
+                                                                            "options": [
+                                                                                {
+                                                                                    "label": "Forums",
+                                                                                    "value": "CATEGORY_FORUMS"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Personal",
+                                                                                    "value": "CATEGORY_PERSONAL"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Promotions",
+                                                                                    "value": "CATEGORY_PROMOTIONS"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Social",
+                                                                                    "value": "CATEGORY_SOCIAL"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Updates",
+                                                                                    "value": "CATEGORY_UPDATES"
+                                                                                }
+                                                                            ]
+                                                                        },
+                                                                        {
+                                                                            "type": "user",
+                                                                            "label": "User labels",
+                                                                            "options": [
+                                                                                {
+                                                                                    "label": "Educational",
+                                                                                    "value": "Label_3220829207423554754"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Invoices",
+                                                                                    "value": "Label_3150061830620407632"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Others",
+                                                                                    "value": "Label_2290799524794094429"
+                                                                                }
+                                                                            ]
+                                                                        }
+                                                                    ],
+                                                                    "mappable": {
+                                                                        "help": "Enter a folder/label ID."
+                                                                    },
+                                                                    "required": true
+                                                                }
+                                                            ]
+                                                        }
+                                                    },
+                                                    "parameters": {
+                                                        "__IMTCONN__": {
+                                                            "data": {
+                                                                "scoped": "true",
+                                                                "connection": "google-email"
+                                                            },
+                                                            "label": "Licht Regen Gmail Connection 20/11/2025 (divineikubor04@gmail.com)"
+                                                        }
+                                                    }
+                                                },
+                                                "parameters": [
+                                                    {
+                                                        "name": "__IMTCONN__",
+                                                        "type": "account:google-email",
+                                                        "label": "Connection",
+                                                        "required": true
+                                                    }
+                                                ],
+                                                "expect": [
+                                                    {
+                                                        "name": "messageId",
+                                                        "type": "text",
+                                                        "label": "Message ID",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "from",
+                                                        "type": "select",
+                                                        "label": "Source folder",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "to",
+                                                        "type": "select",
+                                                        "label": "Destination folder",
+                                                        "required": true
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        {
+                                            "id": 13,
+                                            "module": "datastore:DeleteRecord",
+                                            "version": 1,
+                                            "parameters": {
+                                                "datastore": 77680
+                                            },
+                                            "mapper": {
+                                                "key": "{{11.key}}"
+                                            },
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 1500,
+                                                    "y": 600
+                                                },
+                                                "restore": {
+                                                    "parameters": {
+                                                        "datastore": {
+                                                            "label": "Licht Regen Data Store"
+                                                        }
+                                                    }
+                                                },
+                                                "parameters": [
+                                                    {
+                                                        "name": "datastore",
+                                                        "type": "datastore",
+                                                        "label": "Data store",
+                                                        "required": true
+                                                    }
+                                                ],
+                                                "expect": [
+                                                    {
+                                                        "name": "key",
+                                                        "type": "text",
+                                                        "label": "Key",
+                                                        "required": true
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "flow": [
+                                        {
+                                            "id": 7,
+                                            "module": "google-email:moveAnEmail",
+                                            "version": 4,
+                                            "parameters": {
+                                                "__IMTCONN__": 3636425
+                                            },
+                                            "filter": {
+                                                "name": "Others PATH",
+                                                "conditions": [
+                                                    [
+                                                        {
+                                                            "a": "{{11.data.Content}}",
+                                                            "b": "Others",
+                                                            "o": "text:contain:ci"
+                                                        }
+                                                    ]
+                                                ]
+                                            },
+                                            "mapper": {
+                                                "to": "Label_2290799524794094429",
+                                                "from": "INBOX",
+                                                "messageId": "{{11.data.`Message ID`}}"
+                                            },
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 1200,
+                                                    "y": 900
+                                                },
+                                                "restore": {
+                                                    "expect": {
+                                                        "to": {
+                                                            "mode": "chose",
+                                                            "label": "Others"
+                                                        },
+                                                        "from": {
+                                                            "mode": "chose",
+                                                            "label": "Inbox"
+                                                        },
+                                                        "messageId": {
+                                                            "nested": [
+                                                                {
+                                                                    "help": "To ensure you see the most up-to-date labels, refresh **↻** the Message ID above.",
+                                                                    "name": "from",
+                                                                    "type": "select",
+                                                                    "label": "Source folder",
+                                                                    "default": "INBOX",
+                                                                    "dynamic": true,
+                                                                    "grouped": true,
+                                                                    "options": [
+                                                                        {
+                                                                            "type": "system",
+                                                                            "label": "System folders",
+                                                                            "options": [
+                                                                                {
+                                                                                    "label": "Important",
+                                                                                    "value": "IMPORTANT"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Inbox",
+                                                                                    "value": "INBOX"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Spam",
+                                                                                    "value": "SPAM"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Starred",
+                                                                                    "value": "STARRED"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Trash",
+                                                                                    "value": "TRASH"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Unread",
+                                                                                    "value": "UNREAD"
+                                                                                }
+                                                                            ]
+                                                                        },
+                                                                        {
+                                                                            "type": "category",
+                                                                            "label": "Categories",
+                                                                            "options": [
+                                                                                {
+                                                                                    "label": "Forums",
+                                                                                    "value": "CATEGORY_FORUMS"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Personal",
+                                                                                    "value": "CATEGORY_PERSONAL"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Promotions",
+                                                                                    "value": "CATEGORY_PROMOTIONS"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Social",
+                                                                                    "value": "CATEGORY_SOCIAL"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Updates",
+                                                                                    "value": "CATEGORY_UPDATES"
+                                                                                }
+                                                                            ]
+                                                                        },
+                                                                        {
+                                                                            "type": "user",
+                                                                            "label": "User labels",
+                                                                            "options": [
+                                                                                {
+                                                                                    "label": "Educational",
+                                                                                    "value": "Label_3220829207423554754"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Invoices",
+                                                                                    "value": "Label_3150061830620407632"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Others",
+                                                                                    "value": "Label_2290799524794094429"
+                                                                                }
+                                                                            ]
+                                                                        }
+                                                                    ],
+                                                                    "mappable": {
+                                                                        "help": "Enter a folder/label ID."
+                                                                    },
+                                                                    "required": true
+                                                                },
+                                                                {
+                                                                    "help": "To ensure you see the most up-to-date labels, refresh **↻** the Message ID above.",
+                                                                    "name": "to",
+                                                                    "type": "select",
+                                                                    "label": "Destination folder",
+                                                                    "dynamic": true,
+                                                                    "grouped": true,
+                                                                    "options": [
+                                                                        {
+                                                                            "type": "system",
+                                                                            "label": "System folders",
+                                                                            "options": [
+                                                                                {
+                                                                                    "label": "Important",
+                                                                                    "value": "IMPORTANT"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Inbox",
+                                                                                    "value": "INBOX"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Spam",
+                                                                                    "value": "SPAM"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Starred",
+                                                                                    "value": "STARRED"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Trash",
+                                                                                    "value": "TRASH"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Unread",
+                                                                                    "value": "UNREAD"
+                                                                                }
+                                                                            ]
+                                                                        },
+                                                                        {
+                                                                            "type": "category",
+                                                                            "label": "Categories",
+                                                                            "options": [
+                                                                                {
+                                                                                    "label": "Forums",
+                                                                                    "value": "CATEGORY_FORUMS"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Personal",
+                                                                                    "value": "CATEGORY_PERSONAL"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Promotions",
+                                                                                    "value": "CATEGORY_PROMOTIONS"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Social",
+                                                                                    "value": "CATEGORY_SOCIAL"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Updates",
+                                                                                    "value": "CATEGORY_UPDATES"
+                                                                                }
+                                                                            ]
+                                                                        },
+                                                                        {
+                                                                            "type": "user",
+                                                                            "label": "User labels",
+                                                                            "options": [
+                                                                                {
+                                                                                    "label": "Educational",
+                                                                                    "value": "Label_3220829207423554754"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Invoices",
+                                                                                    "value": "Label_3150061830620407632"
+                                                                                },
+                                                                                {
+                                                                                    "label": "Others",
+                                                                                    "value": "Label_2290799524794094429"
+                                                                                }
+                                                                            ]
+                                                                        }
+                                                                    ],
+                                                                    "mappable": {
+                                                                        "help": "Enter a folder/label ID."
+                                                                    },
+                                                                    "required": true
+                                                                }
+                                                            ]
+                                                        }
+                                                    },
+                                                    "parameters": {
+                                                        "__IMTCONN__": {
+                                                            "data": {
+                                                                "scoped": "true",
+                                                                "connection": "google-email"
+                                                            },
+                                                            "label": "Licht Regen Gmail Connection 20/11/2025 (divineikubor04@gmail.com)"
+                                                        }
+                                                    }
+                                                },
+                                                "parameters": [
+                                                    {
+                                                        "name": "__IMTCONN__",
+                                                        "type": "account:google-email",
+                                                        "label": "Connection",
+                                                        "required": true
+                                                    }
+                                                ],
+                                                "expect": [
+                                                    {
+                                                        "name": "messageId",
+                                                        "type": "text",
+                                                        "label": "Message ID",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "from",
+                                                        "type": "select",
+                                                        "label": "Source folder",
+                                                        "required": true
+                                                    },
+                                                    {
+                                                        "name": "to",
+                                                        "type": "select",
+                                                        "label": "Destination folder",
+                                                        "required": true
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        {
+                                            "id": 14,
+                                            "module": "datastore:DeleteRecord",
+                                            "version": 1,
+                                            "parameters": {
+                                                "datastore": 77680
+                                            },
+                                            "mapper": {
+                                                "key": "{{11.key}}"
+                                            },
+                                            "metadata": {
+                                                "designer": {
+                                                    "x": 1500,
+                                                    "y": 900
+                                                },
+                                                "restore": {
+                                                    "parameters": {
+                                                        "datastore": {
+                                                            "label": "Licht Regen Data Store"
+                                                        }
+                                                    }
+                                                },
+                                                "parameters": [
+                                                    {
+                                                        "name": "datastore",
+                                                        "type": "datastore",
+                                                        "label": "Data store",
+                                                        "required": true
+                                                    }
+                                                ],
+                                                "expect": [
+                                                    {
+                                                        "name": "key",
+                                                        "type": "text",
+                                                        "label": "Key",
+                                                        "required": true
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "flow": [
+                        {
+                            "id": 18,
+                            "module": "datastore:SearchRecord",
+                            "version": 1,
+                            "parameters": {
+                                "limit": null,
+                                "datastore": 77680,
+                                "continueWhenNoRes": false
+                            },
+                            "filter": {
+                                "name": "Junk",
+                                "conditions": [
+                                    [
+                                        {
+                                            "a": "{{3.message.text}}",
+                                            "b": "Junk",
+                                            "o": "text:equal:ci"
+                                        }
+                                    ]
+                                ]
+                            },
+                            "mapper": {
+                                "sort": [],
+                                "filter": [],
+                                "mappAbleLimit": ""
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 600,
+                                    "y": 1200
+                                },
+                                "restore": {
+                                    "parameters": {
+                                        "datastore": {
+                                            "label": "Licht Regen Data Store"
+                                        }
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "datastore",
+                                        "type": "datastore",
+                                        "label": "Data store",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "continueWhenNoRes",
+                                        "type": "boolean",
+                                        "label": "Continue the execution of the route even if the module returns no results"
+                                    },
+                                    {
+                                        "name": "limit",
+                                        "type": "uinteger",
+                                        "label": "Limit"
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "filter",
+                                        "type": "filter",
+                                        "label": "Filter",
+                                        "options": "rpc://datastore/1.15.1/RpcGetUDTKeys",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "sort",
+                                        "spec": [
+                                            {
+                                                "name": "key",
+                                                "type": "select",
+                                                "label": "Key",
+                                                "dynamic": true,
+                                                "options": [],
+                                                "required": true
+                                            },
+                                            {
+                                                "name": "order",
+                                                "type": "select",
+                                                "label": "Order",
+                                                "options": [
+                                                    {
+                                                        "label": "Ascending",
+                                                        "value": 1
+                                                    },
+                                                    {
+                                                        "label": "Descending",
+                                                        "value": -1
+                                                    }
+                                                ],
+                                                "required": true
+                                            }
+                                        ],
+                                        "type": "array",
+                                        "label": "Sort"
+                                    },
+                                    {
+                                        "name": "mappAbleLimit",
+                                        "type": "uinteger",
+                                        "label": "Mappable Limit"
+                                    }
+                                ],
+                                "interface": [
+                                    {
+                                        "name": "__IMTLENGTH__",
+                                        "type": "uinteger",
+                                        "label": "Total number of bundles"
+                                    },
+                                    {
+                                        "name": "__IMTINDEX__",
+                                        "type": "uinteger",
+                                        "label": "Bundle order position"
+                                    },
+                                    {
+                                        "name": "key",
+                                        "type": "text",
+                                        "label": "Key"
+                                    },
+                                    {
+                                        "name": "data",
+                                        "spec": [
+                                            {
+                                                "help": "",
+                                                "name": "Content",
+                                                "type": "text",
+                                                "label": null,
+                                                "default": null,
+                                                "required": false,
+                                                "multiline": false
+                                            },
+                                            {
+                                                "help": "",
+                                                "name": "Message ID",
+                                                "type": "text",
+                                                "label": null,
+                                                "default": null,
+                                                "required": false,
+                                                "multiline": false
+                                            }
+                                        ],
+                                        "type": "collection",
+                                        "label": "Record"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 17,
+                            "module": "google-email:moveAnEmail",
+                            "version": 4,
+                            "parameters": {
+                                "__IMTCONN__": 3636425
+                            },
+                            "filter": null,
+                            "mapper": {
+                                "to": "TRASH",
+                                "from": "INBOX",
+                                "messageId": "{{18.data.`Message ID`}}"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 900,
+                                    "y": 1200
+                                },
+                                "restore": {
+                                    "expect": {
+                                        "to": {
+                                            "mode": "chose",
+                                            "label": "Trash"
+                                        },
+                                        "from": {
+                                            "mode": "chose",
+                                            "label": "Inbox"
+                                        },
+                                        "messageId": {
+                                            "nested": [
+                                                {
+                                                    "help": "To ensure you see the most up-to-date labels, refresh **↻** the Message ID above.",
+                                                    "name": "from",
+                                                    "type": "select",
+                                                    "label": "Source folder",
+                                                    "default": "INBOX",
+                                                    "dynamic": true,
+                                                    "grouped": true,
+                                                    "options": [
+                                                        {
+                                                            "type": "system",
+                                                            "label": "System folders",
+                                                            "options": [
+                                                                {
+                                                                    "label": "Important",
+                                                                    "value": "IMPORTANT"
+                                                                },
+                                                                {
+                                                                    "label": "Inbox",
+                                                                    "value": "INBOX"
+                                                                },
+                                                                {
+                                                                    "label": "Spam",
+                                                                    "value": "SPAM"
+                                                                },
+                                                                {
+                                                                    "label": "Starred",
+                                                                    "value": "STARRED"
+                                                                },
+                                                                {
+                                                                    "label": "Trash",
+                                                                    "value": "TRASH"
+                                                                },
+                                                                {
+                                                                    "label": "Unread",
+                                                                    "value": "UNREAD"
+                                                                }
+                                                            ]
+                                                        },
+                                                        {
+                                                            "type": "category",
+                                                            "label": "Categories",
+                                                            "options": [
+                                                                {
+                                                                    "label": "Forums",
+                                                                    "value": "CATEGORY_FORUMS"
+                                                                },
+                                                                {
+                                                                    "label": "Personal",
+                                                                    "value": "CATEGORY_PERSONAL"
+                                                                },
+                                                                {
+                                                                    "label": "Promotions",
+                                                                    "value": "CATEGORY_PROMOTIONS"
+                                                                },
+                                                                {
+                                                                    "label": "Social",
+                                                                    "value": "CATEGORY_SOCIAL"
+                                                                },
+                                                                {
+                                                                    "label": "Updates",
+                                                                    "value": "CATEGORY_UPDATES"
+                                                                }
+                                                            ]
+                                                        },
+                                                        {
+                                                            "type": "user",
+                                                            "label": "User labels",
+                                                            "options": [
+                                                                {
+                                                                    "label": "Educational",
+                                                                    "value": "Label_3220829207423554754"
+                                                                },
+                                                                {
+                                                                    "label": "Invoices",
+                                                                    "value": "Label_3150061830620407632"
+                                                                },
+                                                                {
+                                                                    "label": "Others",
+                                                                    "value": "Label_2290799524794094429"
+                                                                }
+                                                            ]
+                                                        }
+                                                    ],
+                                                    "mappable": {
+                                                        "help": "Enter a folder/label ID."
+                                                    },
+                                                    "required": true
+                                                },
+                                                {
+                                                    "help": "To ensure you see the most up-to-date labels, refresh **↻** the Message ID above.",
+                                                    "name": "to",
+                                                    "type": "select",
+                                                    "label": "Destination folder",
+                                                    "dynamic": true,
+                                                    "grouped": true,
+                                                    "options": [
+                                                        {
+                                                            "type": "system",
+                                                            "label": "System folders",
+                                                            "options": [
+                                                                {
+                                                                    "label": "Important",
+                                                                    "value": "IMPORTANT"
+                                                                },
+                                                                {
+                                                                    "label": "Inbox",
+                                                                    "value": "INBOX"
+                                                                },
+                                                                {
+                                                                    "label": "Spam",
+                                                                    "value": "SPAM"
+                                                                },
+                                                                {
+                                                                    "label": "Starred",
+                                                                    "value": "STARRED"
+                                                                },
+                                                                {
+                                                                    "label": "Trash",
+                                                                    "value": "TRASH"
+                                                                },
+                                                                {
+                                                                    "label": "Unread",
+                                                                    "value": "UNREAD"
+                                                                }
+                                                            ]
+                                                        },
+                                                        {
+                                                            "type": "category",
+                                                            "label": "Categories",
+                                                            "options": [
+                                                                {
+                                                                    "label": "Forums",
+                                                                    "value": "CATEGORY_FORUMS"
+                                                                },
+                                                                {
+                                                                    "label": "Personal",
+                                                                    "value": "CATEGORY_PERSONAL"
+                                                                },
+                                                                {
+                                                                    "label": "Promotions",
+                                                                    "value": "CATEGORY_PROMOTIONS"
+                                                                },
+                                                                {
+                                                                    "label": "Social",
+                                                                    "value": "CATEGORY_SOCIAL"
+                                                                },
+                                                                {
+                                                                    "label": "Updates",
+                                                                    "value": "CATEGORY_UPDATES"
+                                                                }
+                                                            ]
+                                                        },
+                                                        {
+                                                            "type": "user",
+                                                            "label": "User labels",
+                                                            "options": [
+                                                                {
+                                                                    "label": "Educational",
+                                                                    "value": "Label_3220829207423554754"
+                                                                },
+                                                                {
+                                                                    "label": "Invoices",
+                                                                    "value": "Label_3150061830620407632"
+                                                                },
+                                                                {
+                                                                    "label": "Others",
+                                                                    "value": "Label_2290799524794094429"
+                                                                }
+                                                            ]
+                                                        }
+                                                    ],
+                                                    "mappable": {
+                                                        "help": "Enter a folder/label ID."
+                                                    },
+                                                    "required": true
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "parameters": {
+                                        "__IMTCONN__": {
+                                            "data": {
+                                                "scoped": "true",
+                                                "connection": "google-email"
+                                            },
+                                            "label": "Licht Regen Gmail Connection 20/11/2025 (divineikubor04@gmail.com)"
+                                        }
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "__IMTCONN__",
+                                        "type": "account:google-email",
+                                        "label": "Connection",
+                                        "required": true
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "messageId",
+                                        "type": "text",
+                                        "label": "Message ID",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "from",
+                                        "type": "select",
+                                        "label": "Source folder",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "to",
+                                        "type": "select",
+                                        "label": "Destination folder",
+                                        "required": true
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": 19,
+                            "module": "datastore:DeleteRecord",
+                            "version": 1,
+                            "parameters": {
+                                "datastore": 77680
+                            },
+                            "mapper": {
+                                "key": "{{18.key}}"
+                            },
+                            "metadata": {
+                                "designer": {
+                                    "x": 1200,
+                                    "y": 1200
+                                },
+                                "restore": {
+                                    "parameters": {
+                                        "datastore": {
+                                            "label": "Licht Regen Data Store"
+                                        }
+                                    }
+                                },
+                                "parameters": [
+                                    {
+                                        "name": "datastore",
+                                        "type": "datastore",
+                                        "label": "Data store",
+                                        "required": true
+                                    }
+                                ],
+                                "expect": [
+                                    {
+                                        "name": "key",
+                                        "type": "text",
+                                        "label": "Key",
+                                        "required": true
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "metadata": {
+        "instant": true,
+        "version": 1,
+        "scenario": {
+            "roundtrips": 1,
+            "maxErrors": 3,
+            "autoCommit": true,
+            "autoCommitTriggerLast": true,
+            "sequential": false,
+            "slots": null,
+            "confidential": false,
+            "dataloss": false,
+            "dlq": false,
+            "freshVariables": false
+        },
+        "designer": {
+            "orphans": []
+        },
+        "zone": "eu1.make.com",
+        "notes": []
+    }
+}
